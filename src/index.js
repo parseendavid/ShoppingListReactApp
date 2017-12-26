@@ -1,15 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux'
+import store from './extras/store'
 
-import App from './components/app';
-import reducers from './reducers';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
+
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App />
-  </Provider>
-  , document.querySelector('.container'));
+    <Provider store={store}>    
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
+    </Provider>,
+    document.getElementById('shopping-list-app'));
+registerServiceWorker();
