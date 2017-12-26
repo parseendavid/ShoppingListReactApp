@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
-import NavBar from "./navigation_bars/non_logged_in_user_dash"
+import Navbar from './nav';
+
 
 export default class HomePage extends Component {
   render() {
     return (
       <div>
-        <NavBar/>
-        <div className="jumbotron">
-          <div className="container">
-              <h1 className="display-4">Welcome</h1>
-              <p className="lead">The Ultimate Shopping List App</p>
-          </div>
-        </div>
-        <div className="text-center">
-          <a className="btn btn-lg btn-success" href="/login">LOGIN</a>
-          <a className="btn btn-lg btn-warning" href="/signup">SIGN UP</a>
-          <br/><br/><br/><br/>
+        <Navbar text='login' icon='input' link='/login'/>
+        <div className="container badge" id ="animate-area">
+          <h1>Welcome</h1>
+          <p className="lead">The Ultimate Shopping List App</p>
+          <br/>
+          <br/>
+          <a className="home-btn waves-effect waves-ligh accent-color btn-large " href="/signup"><i className="material-icons right">label_outline</i>sign up</a>
+
         </div>
       </div>
     );
