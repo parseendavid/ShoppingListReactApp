@@ -15,6 +15,7 @@ class LoginPage extends Component {
     }
 
     handleSubmit(e) {
+        e.preventDefault();
         const formData = {"email":this.refs.email.value, "password":this.refs.password.value };
         this.props.login_user(formData);
     }

@@ -55,7 +55,7 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                <NavigationBar text="logout" icon="input" link="/logout"/>
+                <NavigationBar text="logout" icon="input" link="/logout" home_link="/dashboard"/>
                 <div className="container badge">
                     <h6>Dashboard</h6>
                     {this.renderListTableDetails()}

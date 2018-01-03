@@ -1,4 +1,5 @@
 import axiosConfig from "../extras/axios_config";
+import {toast} from "react-toastify";
 
 export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists";
 export const FETCH_SHOPPING_LIST_ITEMS = "fetch_shopping_list_items";
@@ -7,14 +8,18 @@ export const FETCH_JWT_TOKEN = "fetch_jwt_token";
 export function SignUp_User(values) {
     return (dispatch) => {
         axiosConfig.request({
-            method: "put",
+            method: "post",
             url: `/auth/register/`,
             data: values
         })
-        .then(() => {
-            Login_User({"email":values.email,
-                        "password":values.password});
-        });
+        .then((response) => {
+            toast.info(response.data.message);
+        })
+        .catch(
+            error =>{
+                console.log(error);
+            }
+        );
     };
 }
 
@@ -26,21 +31,25 @@ export function Login_User(values) {
             data: values
         })
         .then((response) => {
+            toast.success(response.data.message);
             dispatch({
                 type: FETCH_JWT_TOKEN,
                 payload: response
             });
-        });
-    };
+        })
+        .catch(()=>{
+            toast.error("INVALID CREDENTIALS !!!!");
+            });
+        };
 }
 
-export function Fetch_Shopping_Lists(store) {
+export function Fetch_Shopping_Lists() {
     return (dispatch) => {
         axiosConfig.request({
             method: "get",
             url: `/lists`,
             headers: {
-                "x-access-token": store.getState().token
+                "x-access-token": localStorage.getItem("TOKEN")
             }
         }).then((response) => {
             dispatch({
