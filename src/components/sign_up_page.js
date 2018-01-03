@@ -1,56 +1,81 @@
-import React, { Component } from 'react';
-import {Field, reduxForm} from "redux-form" 
-import NavBar from "./navigation_bars/non_logged_in_user_dash"
+import React, {Component} from 'react';
+import NavigationBar from "./nav";
+import {SignUp_User} from "../actions";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import PropTypes from "prop-types";
 
-class LoginPage extends Component {
-renderField = ({input,placeholder,type,meta: { touched, error, warning }}) =>(
-    <div>
-      <div>
-        <input {...input} type={type} className="form-control" placeholder={placeholder}/>
-        {touched &&((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-      </div>
-      <br/>
-    </div>
-  )
-  render() {
-    return (
-      <div>
-        <NavBar/>
-        <div className="jumbotron" id='white-bg'>
-          <form className="form-signin">
-            <h3 className="form-signin-heading">SignUp</h3>
-            <Field
-              name="username"
-              type="text"
-              placeholder="Username"
-              component={this.renderField}
-              />
-            <Field
-              name="Email"
-              type="email"
-              placeholder="Email Address"
-              component={this.renderField}
-              />
-            <Field
-              name="password"
-              type="password"
-              placeholder="Password"
-              component={this.renderField}
-              />
-            <Field
-              name="confirm_password"
-              type="password"
-              placeholder="Password"
-              component={this.renderField}
-              />
-          </form>
-        </div>
-      </div>
-    );
-  }
+
+
+class SignUp extends Component {
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const formData = {"username":this.refs.username.value,
+                          "email":this.refs.email.value,
+                          "password":this.refs.password.value };
+        this.props.register_user(formData);
+    }
+
+    render() {
+        return (
+            <div>
+                <NavigationBar text="login" icon="input" link="/login"/>
+                <div className="badge">
+                    <div className="small_form container">
+                        <form onSubmit={this.handleSubmit}>
+                            <input ref="username"
+                                   type="text"
+                                   placeholder="Username"
+                                   pattern="^[a-zA-Z0-9_]*$"
+                                   title="Must not contain special characters"
+                                   required/>
+                            <input ref="email"
+                                   type="email"
+                                   placeholder="Email"
+                                   required/>
+                            <input ref="password"
+                                   type="password"
+                                   placeholder="password"
+                                   minLength="6"
+                                   required/>
+                            <button className={"waves-effect waves-light btn light-blue right"}
+                                    type="submit">
+                                SIGN UP
+                            </button>
+                            <button className={"waves-effect waves-light btn grey left"}
+                                    type="reset">
+                                RESET
+                            </button>
+                        </form>
+                    </div>
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </div>
+            </div>
+        );
+        }
+    }
+SignUp.propTypes = {
+    token: PropTypes.string,
+    register_user: PropTypes.func.isRequired,
+    dispatch: PropTypes.object
+};
+function mapStateToProps(state) {
+    return {
+        state
+    };
 }
-export default reduxForm(
-  {
-    form: "SignUpForm"
-  }
-)(LoginPage)
+
+function mapDispatchToProps(dispatch) {
+    return {
+        register_user: bindActionCreators(SignUp_User, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+
+ 

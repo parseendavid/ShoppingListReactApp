@@ -1,43 +1,80 @@
-import axios from "axios"
+import axiosConfig from "../extras/axios_config";
+import {toast} from "react-toastify";
 
-export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists"
-export const FETCH_SHOPPING_LIST_ITEMS = "fetch_shopping_list_items"
-const token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiIyNDI2YzE2Yy01MDMwLTRjMGQtOTk5ZC1mMDM0YmJhZGE2MjgiLCJleHAiOjE1MTE3ODcyMjB9.M6uPUlQAauhyda-cDM4Ok67ion-Zxb3KX8G2NBfUV10"
+export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists";
+export const FETCH_SHOPPING_LIST_ITEMS = "fetch_shopping_list_items";
+export const FETCH_JWT_TOKEN = "fetch_jwt_token";
 
-
-export function Fetch_Shopping_Lists(){
-    const request = axios(
-        {
-            method: 'get',
-            url: 'http://127.0.0.1:5000/lists',
-            headers:{
-                "x-access-token":token
+export function SignUp_User(values) {
+    return (dispatch) => {
+        axiosConfig.request({
+            method: "post",
+            url: `/auth/register/`,
+            data: values
+        })
+        .then((response) => {
+            toast.info(response.data.message);
+        })
+        .catch(
+            error =>{
+                console.log(error);
             }
-            
-        }
-          
-    )
-    return({
-        type: FETCH_SHOPPING_LISTS,
-        payload: request
-    }
-    )
+        );
+    };
 }
-export function Fetch_Shopping_List_Items(){
-    const request = axios(
-        {
-            method: 'get',
-            url: 'http://127.0.0.1:5000/list/1/items',
-            headers:{
-                "x-access-token":token
+
+export function Login_User(values) {
+    return (dispatch) => {
+        axiosConfig.request({
+            method: "post",
+            url: `/auth/login/`,
+            data: values
+        })
+        .then((response) => {
+            toast.success(response.data.message);
+            dispatch({
+                type: FETCH_JWT_TOKEN,
+                payload: response
+            });
+        })
+        .catch(()=>{
+            toast.error("INVALID CREDENTIALS !!!!");
+            });
+        };
+}
+
+export function Fetch_Shopping_Lists() {
+    return (dispatch) => {
+        axiosConfig.request({
+            method: "get",
+            url: `/lists`,
+            headers: {
+                "x-access-token": localStorage.getItem("TOKEN")
             }
-            
-        }
-          
-    )
-    return({
-        type: FETCH_SHOPPING_LIST_ITEMS,
-        payload: request
-    }
-    )
+        }).then((response) => {
+            dispatch({
+                type: FETCH_SHOPPING_LISTS,
+                payload: response
+            });
+        });
+    };
+}
+
+
+export function Fetch_Shopping_List_Items(store) {
+    return (dispatch) => {
+        axiosConfig.request({
+            method: "get",
+            url: `/lists/1/items`,
+            headers: {
+                "x-access-token": store.getState().token
+            }
+        }).then((response) => {
+            dispatch({
+                type: FETCH_SHOPPING_LIST_ITEMS,
+                payload: response
+            });
+        });
+    };
+
 }

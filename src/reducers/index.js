@@ -1,12 +1,14 @@
-import { combineReducers } from 'redux';
-import {reducer as formReducer} from "redux-form"
-import ListsReducer from "./reducer_lists"
-import ItemsReducer from "./reducer_items"
+import {combineReducers} from 'redux';
+import ListsReducer from "./reducer_lists";
+import ItemsReducer from "./reducer_items";
+import TokenReducer from "./token_reducer";
 
 const rootReducer = combineReducers({
-  lists : ListsReducer,
-  items : ItemsReducer,
-  form : formReducer
+    course:"",
+    token: TokenReducer,
+    lists: ListsReducer,
+    items: ItemsReducer,
+    // ...createForms({user_form: initialUserState, list_form: initialListState, item_form: initialItemState,}),
 });
 
 export default rootReducer;

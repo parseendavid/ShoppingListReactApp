@@ -1,44 +1,86 @@
-import React, { Component } from 'react';
-import {Field, reduxForm} from "redux-form"
-import NavBar from "./navigation_bars/non_logged_in_user_dash"
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
+import {Redirect} from "react-router-dom";
+
+import Navbar from "./nav";
+import {Login_User} from "../actions";
 
 class LoginPage extends Component {
-renderField = ({input,placeholder,type,meta: { touched, error, warning }}) =>(
-    <div>
-      <div>
-        <input {...input} type={type} className="form-control" placeholder={placeholder}/>
-        {touched &&((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-      </div>
-      <br/>
-    </div>
-  )
-  render() {
-    return (
-      <div>
-        <NavBar/>
-        <div className="jumbotron" id='white-bg'>
-          <form className="form-signin">
-            <h3 className="form-signin-heading">Login</h3>
-            <Field
-              name="Email"
-              type="email"
-              placeholder="Email Address"
-              component={this.renderField}
-              />
-            <Field
-              name="password"
-              type="password"
-              placeholder="Password"
-              component={this.renderField}
-              />
-          </form>
-        </div>
-      </div>
-    );
-  }
+    constructor(props) {
+        super(props);
+        this.state={course:""};
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const formData = {"email":this.refs.email.value, "password":this.refs.password.value };
+        this.props.login_user(formData);
+    }
+
+
+
+    render() {
+        if (this.props.state.token) {
+            return (
+                <Redirect push to="/dashboard"/>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <Navbar text="sign up" icon="label_outline" link="/signup"/>
+                    <div className="badge">
+                        <div className="small_form container">
+                            <form onSubmit={this.handleSubmit}>
+                                <div>
+                                <input ref="email"
+                                       type="email"
+                                       placeholder="Email"
+                                       required/>
+                                <input ref="password"
+                                       type="password"
+                                       placeholder="password"
+                                       minLength="6"
+                                       required/>
+                                <button className={"btn waves-effect waves-light light-blue right"}
+                                        type="submit">
+                                    LOGIN
+                                </button>
+                                <button className={"btn waves-effect waves-light grey left"}
+                                        type="reset">
+                                    RESET
+                                </button>
+                                </div>
+                            </form>
+                        </div>
+                        <p>If you do not have an account, please <a href={"/signup"}>Sign Up.</a></p>
+                    </div>
+                </div>
+            );
+        }
+    }
 }
-export default reduxForm(
-  {
-    form: "LoginForm"
-  }
-)(LoginPage)
+
+LoginPage.propTypes = {
+    token: PropTypes.string,
+    login_user: PropTypes.func.isRequired,
+    dispatch: PropTypes.object,
+    state: PropTypes.object
+};
+
+function mapStateToProps(state) {
+    return {
+        state
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        login_user: bindActionCreators(Login_User, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
