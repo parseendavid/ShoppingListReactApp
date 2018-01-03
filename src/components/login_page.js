@@ -1,46 +1,85 @@
-import React, { Component } from 'react';
-import {Control, Form, Errors} from 'react-redux-form'
-import axiosConfig from '../extras/axios_config'
-import {withRouter, Redirect} from 'react-router-dom'
-import _ from 'lodash'
+import React, {Component} from "react";
+import {connect} from "react-redux";
+import {bindActionCreators} from 'redux';
+import PropTypes from 'prop-types';
+import {Redirect} from "react-router-dom";
 
-
-import Navbar from "./nav"
-import store from '../extras/store'
-import {Login_User} from "../actions"
+import Navbar from "./nav";
+import {Login_User} from "../actions";
 
 class LoginPage extends Component {
-  handleSubmit(values) {
-    store.dispatch(Login_User(values, this.props.history.push))
-  }
-  render() {
-    const required = (val) => val && _.size(val); const length = (val) => _.size(val) > 6
-    if(store.getState().token){
-      return(
-        <Redirect push to='/dashboard'/>
-      )
+    constructor(props) {
+        super(props);
+        this.state={course:""};
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    else{
-      return (
-        <div>
-      <Navbar text='sign up' icon='label_outline' link='/signup'/>
-      <div className="badge">
-        <div className="small_form container">
-          <Form model="user_form" onSubmit={(val) => this.handleSubmit(val)}>
-          <label><i className="default-text-color material-icons left">mail_outline</i></label>
-          <Control.text type="email" placeholder="Email" model=".email" validators={{required}}/>
-          <Errors className="errors" model="user.email"show="touched"messages={{required: 'Email is required'}}/>
-          <label><i className="default-text-color material-icons left">lock_outline</i></label>
-          <Control.text type="password" placeholder="Password" model=".password" validators={{required,length}} />
-          <Errors className="errors" model="user.password"show="touched"messages={{required: 'Password is required',length:"Password should be atleast 6 characters long."}}/>
-          <Control.reset className="btn grey left" model="user" type="reset">Reset</Control.reset>
-          <button className="light-blue btn right">Submit</button>
-          </Form>
-        </div>
-        </div>
-      </div>
-    );
-  }
-  }
+
+    handleSubmit(e) {
+        const formData = {"email":this.refs.email.value, "password":this.refs.password.value };
+        this.props.login_user(formData);
+    }
+
+
+
+    render() {
+        if (this.props.state.token) {
+            return (
+                <Redirect push to="/dashboard"/>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <Navbar text="sign up" icon="label_outline" link="/signup"/>
+                    <div className="badge">
+                        <div className="small_form container">
+                            <form onSubmit={this.handleSubmit}>
+                                <div>
+                                <input ref="email"
+                                       type="email"
+                                       placeholder="Email"
+                                       required/>
+                                <input ref="password"
+                                       type="password"
+                                       placeholder="password"
+                                       minLength="6"
+                                       required/>
+                                <button className={"btn waves-effect waves-light light-blue right"}
+                                        type="submit">
+                                    LOGIN
+                                </button>
+                                <button className={"btn waves-effect waves-light grey left"}
+                                        type="reset">
+                                    RESET
+                                </button>
+                                </div>
+                            </form>
+                        </div>
+                        <p>If you do not have an account, please <a href={"/signup"}>Sign Up.</a></p>
+                    </div>
+                </div>
+            );
+        }
+    }
 }
-export default LoginPage
+
+LoginPage.propTypes = {
+    token: PropTypes.string,
+    login_user: PropTypes.func.isRequired,
+    dispatch: PropTypes.object,
+    state: PropTypes.object
+};
+
+function mapStateToProps(state) {
+    return {
+        state
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        login_user: bindActionCreators(Login_User, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

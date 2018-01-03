@@ -1,41 +1,80 @@
-import React, { Component } from 'react';
-import _ from 'lodash'
-import Navbar from "./nav"
-import {Control,Errors, Form} from 'react-redux-form'
+import React, {Component} from 'react';
+import NavigationBar from "./nav";
+import {SignUp_User} from "../actions";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import PropTypes from "prop-types";
 
-import store from '../extras/store'
-import {SignUp_User} from "../actions"
 
+class SignUp extends Component {
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-export default class SignUp extends Component {
-  handleSubmit(values) { 
-    store.dispatch(SignUp_User(values, this.props.history.push))   
-  }
-  render() {
-    const required = (val) => val && _.size(val); const length = (val) => _.size(val) > 6
-    return (
-      <div>
-        <Navbar text='login' icon='input' link='/login'/>
-        <div className="badge">
-        <div className="small_form container">
-          <Form model="user_form" onSubmit={(val) => this.handleSubmit(val)}>
-          <label><i className="default-text-color material-icons left">account_box</i></label>
-          <Control.text type="text" placeholder="Username" model=".username" validators={{required}}/>
-          <Errors className="errors" model="user_form.username"show="touched"messages={{required: 'Username is required'}}/>
-          <label><i className="default-text-color material-icons left">mail_outline</i></label>
-          <Control.text type="email" placeholder="Email" model=".email" validators={{required}}/>
-          <Errors className="errors" model="user_form.email"show="touched"messages={{required: 'Email is required'}}/>
-          <label><i className="default-text-color material-icons left">lock_outline</i></label>
-          <Control.text type="password" placeholder="Password" model=".password" validators={{required,length}} />
-          <Errors className="errors" model="user_form.password"show="touched"messages={{required: 'Password is required. ',length:"Should be atleast 6 characters long."}}/>
-          <Control.reset className="btn grey left" model="user" type="reset">Reset</Control.reset>
-           <button className="light-blue btn right">Submit</button>
-          </Form>
-        </div>
-        </div>
-      </div>
-    );
-  }
+    handleSubmit(e) {
+        const formData = {"username":this.refs.username.values,
+                          "email":this.refs.email.value,
+                          "password":this.refs.password.value };
+        this.props.register_user(formData);
+    }
+
+    render() {
+        return (
+            <div>
+                <NavigationBar text="login" icon="input" link="/login"/>
+                <div className="badge">
+                    <div className="small_form container">
+                        <form onSubmit={this.handleSubmit}>
+                            <div>
+                                <input ref="username"
+                                       type="text"
+                                       placeholder="Username"
+                                       pattern="^[a-zA-Z0-9_]*$"
+                                       title="Must not contain special characters"
+                                       required/>
+                                <input ref="email"
+                                       type="email"
+                                       placeholder="Email"
+                                       required/>
+                                <input ref="password"
+                                       type="password"
+                                       placeholder="password"
+                                       minLength="6"
+                                       required/>
+                                <button className={"waves-effect waves-light btn light-blue right"}
+                                        type="submit">
+                                    SIGN UP
+                                </button>
+                                <button className={"waves-effect waves-light btn grey left"}
+                                        type="reset">
+                                    RESET
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        );
+        }
+    }
+SignUp.propTypes = {
+    token: PropTypes.string,
+    register_user: PropTypes.func.isRequired,
+    dispatch: PropTypes.object
+};
+function mapStateToProps(state) {
+    return {
+        state
+    };
 }
+
+function mapDispatchToProps(dispatch) {
+    return {
+        register_user: bindActionCreators(SignUp_User, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
 
  
