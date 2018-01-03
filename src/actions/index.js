@@ -17,7 +17,7 @@ export function SignUp_User(values) {
         })
         .catch(
             error =>{
-                console.log(error);
+                //
             }
         );
     };

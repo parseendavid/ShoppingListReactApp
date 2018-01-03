@@ -12,7 +12,7 @@ function Nav({text, icon, link, home_link}) {
                         className="material-icons right">{icon}</i>{text}</a>
                 </ul>
             </div>
-            <ToastContainer hideProgressBar={true}/>
+            <ToastContainer hideProgressBar/>
         </nav>
     );
 }
