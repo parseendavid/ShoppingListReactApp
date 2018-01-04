@@ -5,6 +5,9 @@ body {
 nav {
     margin-top: -5px;
 }
+.modal{
+    width:40%;
+}
 
 .nav-logo {
     height: 24px;
