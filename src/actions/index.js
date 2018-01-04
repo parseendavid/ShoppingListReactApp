@@ -1,73 +1,163 @@
-import axiosConfig from "../extras/axios_config"
+import axiosConfig from "../extras/axios_config";
+import {toast} from "react-toastify";
 
-export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists"
-export const FETCH_SHOPPING_LIST_ITEMS = "fetch_shopping_list_items"
-export const FETCH_JWT_TOKEN = "fetch_jwt_token"
-
-export function SignUp_User(values,push){
-    return (dispatch) =>{
+export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists";
+export const FETCH_SHOPPING_LIST_ITEMS = "fetch_shopping_list_items";
+export const FETCH_JWT_TOKEN = "fetch_jwt_token";
+///////////////////////////////////////////
+//                                      //
+//      AUTHENTICATION ACTIONS          //
+//                                       //
+//////////////////////////////////////////
+export function SignUp_User(values) {
+    return (dispatch) => {
         axiosConfig.request({
-                method: "post",
-                url: `/auth/register/`,
-                data:values
-            })
-        .then((response)=>{
-            push('/login')
-            const data = {email:values.email,password:values.password}
-            Login_User(data,push)
+            method: "post",
+            url: `/auth/register/`,
+            data: values
         })
-    }
+            .then((response) => {
+                toast.info(response.data.message);
+            })
+            .catch(
+                error => {
+                    toast.warn(error.response.data.message);
+                }
+            );
+    };
 }
 
-export function Login_User(values, push){
-    return (dispatch) =>{
+export function Login_User(values) {
+    return (dispatch) => {
         axiosConfig.request({
-                method: "post",
-                url: `/auth/login/`,
-                data:values
+            method: "post",
+            url: `/auth/login/`,
+            data: values
+        })
+            .then((response) => {
+                toast.success(response.data.message);
+                dispatch({
+                    type: FETCH_JWT_TOKEN,
+                    payload: response
+                });
             })
-        .then((response) => {
+            .catch(() => {
+                toast.error("INVALID CREDENTIALS !!!!");
+            });
+    };
+}
+
+///////////////////////////////////////////
+//                                      //
+//      SHOPPING LISTS ACTIONS          //
+//                                       //
+//////////////////////////////////////////
+export function Fetch_Shopping_Lists() {
+    return (dispatch) => {
+        axiosConfig.request({
+            method: "get",
+            url: `/lists`,
+            headers: {
+                "x-access-token": localStorage.getItem("TOKEN")
+            }
+        }).then((response) => {
             dispatch({
-                type: FETCH_JWT_TOKEN,
+                type: FETCH_SHOPPING_LISTS,
                 payload: response
-                })
-            })
-        .then(()=>{push('/dashboard')})
-    }
+            });
+        })
+            .catch(
+                error => {
+                    switch (error.response.status) {
+                        case 401:
+                            localStorage.removeItem("TOKEN");
+                            window.location.href = "/login";
+                    }
+                }
+            );
+    };
 }
 
-export function Fetch_Shopping_Lists(store){
-    return (dispatch) =>{
+export function Add_Shopping_List(values) {
+    return function (dispatch) {
         axiosConfig.request({
-                method: "get",
-                url: `/lists`,
-                headers:{
-                    "x-access-token":store.getState().token
-                }
-            }).then((response) => {
-                dispatch({
-                    type: FETCH_SHOPPING_LISTS,
-                    payload: response
-                })
-        })
-    }
+            method: "post",
+            url: `/lists`,
+            headers: {
+                "x-access-token": localStorage.getItem("TOKEN")
+            },
+            data: values
+        }).then((response) => {
+            dispatch(Fetch_Shopping_Lists());
+            toast.success(response.data.message);
+            $("#add-list-modal").modal("close");
+        }).catch(
+            error => {
+                toast.error(error.response.data.message);
+                return error;
+            }
+        );
+    };
 }
-
-
-export function Fetch_Shopping_List_Items(store){
-    return (dispatch) =>{
+export function Edit_Shopping_List(values) {
+    return function (dispatch) {
         axiosConfig.request({
-                method: "get",
-                url: `/lists/1/items`,
-                headers:{
-                    "x-access-token":store.getState().token
-                }
-            }).then((response) => {
-                dispatch({
-                    type: FETCH_SHOPPING_LIST_ITEMS,
-                    payload: response
-                })
-        })
-    }
+            method: "put",
+            url: `/list/${values.id}`,
+            headers: {
+                "x-access-token": localStorage.getItem("TOKEN")
+            },
+            data: values
+        }).then((response) => {
+            dispatch(Fetch_Shopping_Lists());
+            toast.success(response.data.message);
+            $("#edit-list-modal").modal("close");
+        }).catch(
+            error => {
+                toast.error(error.response.data.message);
+                return error;
+            }
+        );
+    };
+}
+export function Delete_Shopping_List(id) {
+    return function (dispatch) {
+        axiosConfig.request({
+            method: "delete",
+            url: `/list/${id}`,
+            headers: {
+                "x-access-token": localStorage.getItem("TOKEN")
+            },
+        }).then((response) => {
+            dispatch(Fetch_Shopping_Lists());
+            toast.warn(response.data.message);
+        }).catch(
+            error => {
+                toast.error(error.response.data.message);
+                return error;
+            }
+        );
+    };
+}
+///////////////////////////////////////////
+//                                      //
+//      LIST ITEMS ACTIONS              //
+//                                       //
+//////////////////////////////////////////
+export function Fetch_Shopping_List_Items(store) {
+    return (dispatch) => {
+        axiosConfig.request({
+            method: "get",
+            url: `/lists/1/items`,
+            headers: {
+                "x-access-token": store.getState().token
+            }
+        }).then((response) => {
+            dispatch({
+                type: FETCH_SHOPPING_LIST_ITEMS,
+                payload: response
+            });
+        });
+    };
 
 }
