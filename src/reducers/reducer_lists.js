@@ -1,11 +1,11 @@
-import {FETCH_SHOPPING_LISTS} from "../actions";
-import _ from 'lodash';
+import {FETCH_SHOPPING_LISTS} from "../actions"
+import _ from 'lodash'
 
-export default function (state = {}, action) {
-    switch (action.type) {
+export default function(state={}, action){
+    switch(action.type){
         case FETCH_SHOPPING_LISTS:
-            return _.mapKeys(action.payload.data.shopping_lists, 'id');
+            return _.mapKeys(action.payload.data.shopping_lists, 'id')
         default:
-            return state;
+            return state
     }
 }
