@@ -113,8 +113,8 @@ class Dashboard extends Component {
                                         <input ref="list_name"
                                                type="text"
                                                placeholder="List Name"
-                                               pattern="^[a-zA-Z0-9_]*$"
-                                               title="Must not contain special characters"
+                                               pattern="^(\w+ ?)*$"
+                                               title="Must not contain special characters."
                                                required/>
                                         <div className="modal-footer">
                                             <button className={"btn waves-effect waves-light light-blue right"}
@@ -149,8 +149,8 @@ class Dashboard extends Component {
                                                onChange={this.handleEditValues}
                                                type="text"
                                                placeholder="New List Name"
-                                               pattern="^[a-zA-Z0-9_]*$"
-                                               title="Must not contain special characters"
+                                               pattern="^(\w+ ?)*$"
+                                               title="Must not contain special characters edit"
                                                required
                                         />
                                         <div className="modal-footer">
