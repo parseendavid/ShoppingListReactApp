@@ -214,6 +214,7 @@ class Details extends Component {
                                            onChange={this.handleEditValues}
                                            name="quantity"
                                            type="number"
+                                           min={1}
                                            value={this.state.edit_item.quantity}
                                            required/>
 
