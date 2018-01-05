@@ -7,6 +7,7 @@ import LoginPage from './components/login_page';
 import SignUp from './components/sign_up_page';
 import Dashboard from './components/dashboard';
 import Details from './components/details';
+import NotFound from './components/404';
 import Logout from './components/logout';
 
 class App extends Component {
@@ -20,6 +21,7 @@ class App extends Component {
                 <Route path="/login" component={LoginPage}/>
                 <Route path="/logout" component={Logout}/>
                 <Route path="/signup" component={SignUp}/>
+                <Route path="*" component={NotFound}/>
             </Switch>
         );
     }

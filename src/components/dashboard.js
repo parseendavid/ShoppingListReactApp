@@ -2,9 +2,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {bindActionCreators} from "redux";
+import {Link} from "react-router-dom";
+import CustomModal from "../extras/modal";
+
 
 import NavigationBar from "./nav";
-import {Delete_Shopping_List,Edit_Shopping_List,Add_Shopping_List,Fetch_Shopping_Lists} from "../actions";
+import {request,Delete_Shopping_List,Edit_Shopping_List,Add_Shopping_List,Fetch_Shopping_Lists} from "../actions";
 import PropTypes from "prop-types";
 
 
@@ -20,12 +23,15 @@ class Dashboard extends Component {
 
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        CustomModal();
+        this.props.actions.request();
         this.props.actions.Fetch_Shopping_Lists();
     }
 
     handleAddList(e){
         e.preventDefault();
+        this.props.actions.request();
         this.props.actions.Add_Shopping_List({"list_name":this.refs.list_name.value});
     }
     handleEditValues(e){
@@ -37,13 +43,21 @@ class Dashboard extends Component {
 
     handleEditList(e){
         e.preventDefault();
+        this.props.actions.request();
         this.props.actions.Edit_Shopping_List({"id":this.refs.list_id.value,"list_name":this.refs.new_name.value});
     }
 
     handleDeleteList(e,id){
         e.preventDefault();
+        this.props.actions.request();
         this.props.actions.Delete_Shopping_List(id);
     }
+
+    // handleViewListDetails(e, list_details){
+    //     e.preventDefault();
+    //     console.log(list_details);
+    //
+    // }
 
     renderListTableDetails() {
         if (undefined in this.props.lists) {
@@ -55,6 +69,14 @@ class Dashboard extends Component {
         else {
             return (
                 <table className="container highlight" style={{width: "100%"}}>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Items</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
                     <tbody>
                     {_.map(_.mapKeys(this.props.lists, "list_name"),
                         list => {
@@ -64,7 +86,9 @@ class Dashboard extends Component {
                                         {list.list_name}
                                     </td>
                                     <td>
-                                        <a className="waves-effect waves-light" href={`/list/${list.id}`}>details</a>
+                                        <Link className="waves-effect waves-light"
+                                           to={`/list/${list.id}`}>
+                                            details </Link>
                                     </td>
                                     <td>
                                         <a className="modal-trigger waves-effect waves-light" href="#edit-list-modal"
@@ -95,7 +119,8 @@ class Dashboard extends Component {
     render() {
         return (
                 <div>
-                    <NavigationBar text="logout" icon="input" link="/logout" home_link="/dashboard"/>
+                    <NavigationBar text="logout" icon="input" link="/logout" home_link="/dashboard"
+                                   loading={this.props.loading}/>
                     <div className="container badge">
                         <h6>Dashboard</h6>
                         <a className="modal-trigger right btn-floating btn-large waves-effect waves-light accent-color"
@@ -178,14 +203,18 @@ Dashboard.propTypes = {
     actions: PropTypes.object.isRequired,
     dispatch: PropTypes.object,
     lists: PropTypes.object,
+    loading:PropTypes.bool
 };
 function mapStateToProps(state) {
-    return {lists: state.lists};
+    return {
+        loading:state.loading,
+        lists: state.lists}
+        ;
 }
 function mapDispatchToProps(dispatch) {
     return {actions : bindActionCreators(
         {
-            Fetch_Shopping_Lists, Add_Shopping_List,Edit_Shopping_List,Delete_Shopping_List
+            Fetch_Shopping_Lists, Add_Shopping_List,Edit_Shopping_List,Delete_Shopping_List,request
         },dispatch)};
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
