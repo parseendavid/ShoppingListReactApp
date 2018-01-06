@@ -5,7 +5,6 @@ import {bindActionCreators} from "redux";
 import {Link} from "react-router-dom";
 import CustomModal from "../extras/modal";
 
-
 import NavigationBar from "./nav";
 import {request,Delete_Shopping_List,Edit_Shopping_List,Add_Shopping_List,Fetch_Shopping_Lists} from "../actions";
 import PropTypes from "prop-types";
