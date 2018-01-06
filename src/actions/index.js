@@ -78,7 +78,7 @@ export function Login_User(values) {
             })
             .catch(() => {
                 dispatch(failure());
-                toast.error("INVALID CREDENTIALS !!!!");
+                toast.error("Wrong credentials...");
             });
     };
 }
@@ -131,6 +131,7 @@ export function Add_Shopping_List(values) {
             $("#add-list-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_Lists());
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -154,6 +155,7 @@ export function Edit_Shopping_List(values) {
             $("#edit-list-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_Lists());
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -175,6 +177,7 @@ export function Delete_Shopping_List(id) {
             toast.warn(response.data.message);
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_Lists());
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -233,6 +236,7 @@ export function Add_Shopping_List_Item(values) {
             $("#add-item-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_List_Items(values.list_id));
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -254,6 +258,7 @@ export function Delete_Shopping_List_Item(values) {
             toast.warn(response.data.message);
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_List_Items(values.list_id));
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -277,6 +282,7 @@ export function Edit_Shopping_List_Item(values) {
             $("#edit-item-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_List_Items(values.list_id));
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;

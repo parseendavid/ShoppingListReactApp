@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {Redirect} from "react-router-dom";
 
 import Navbar from "./nav";
-import {Login_User} from "../actions";
+import {Login_User,request} from "../actions";
 
 class LoginPage extends Component {
     constructor(props) {
@@ -17,7 +17,8 @@ class LoginPage extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const formData = {"email":this.refs.email.value, "password":this.refs.password.value };
-        this.props.login_user(formData);
+        this.props.actions.request();
+        this.props.actions.Login_User(formData);
     }
 
 
@@ -31,7 +32,7 @@ class LoginPage extends Component {
         else {
             return (
                 <div>
-                    <Navbar text="sign up" icon="label_outline" link="/signup"/>
+                    <Navbar text="sign up" icon="label_outline" link="/signup" loading={this.props.state.loading}/>
                     <div className="badge">
                         <div className="small_form container">
                             <form onSubmit={this.handleSubmit}>
@@ -66,9 +67,9 @@ class LoginPage extends Component {
 
 LoginPage.propTypes = {
     token: PropTypes.string,
-    login_user: PropTypes.func.isRequired,
     dispatch: PropTypes.object,
-    state: PropTypes.object
+    state: PropTypes.object,
+    actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -79,7 +80,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        login_user: bindActionCreators(Login_User, dispatch)
+        actions: bindActionCreators({Login_User,request}, dispatch)
     };
 }
 
