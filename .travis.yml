@@ -5,5 +5,7 @@ cache:
   directories:
   - node_modules
 script:
-  - npm test -- --coverage
+  - npm __test__ -- --coverage
   - npm run lint
+after_script: # Upload coverage reports
+  - npm run coveralls

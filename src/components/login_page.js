@@ -7,7 +7,7 @@ import {Redirect} from "react-router-dom";
 import Navbar from "./nav";
 import {Login_User,request} from "../actions";
 
-class LoginPage extends Component {
+export class LoginPage extends Component {
     constructor(props) {
         super(props);
         this.state={course:""};

@@ -10,7 +10,7 @@ import {request,Delete_Shopping_List,Edit_Shopping_List,Add_Shopping_List,Fetch_
 import PropTypes from "prop-types";
 
 
-class Dashboard extends Component {
+export class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state={list_name:"", edit_list:{name:"",id:""}};

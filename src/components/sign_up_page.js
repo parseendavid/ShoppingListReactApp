@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 
 
-class SignUp extends Component {
+export class SignUp extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);

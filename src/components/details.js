@@ -9,7 +9,7 @@ import {request,Delete_Shopping_List_Item,Edit_Shopping_List_Item,Add_Shopping_L
 import PropTypes from "prop-types";
 
 
-class Details extends Component {
+export class Details extends Component {
     constructor(props) {
         super(props);
         this.state={edit_item:{quantity:"",old_name:"",new_name:"",id:"",parent_id:""}};
