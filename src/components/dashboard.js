@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {bindActionCreators} from "redux";
-import {Link} from "react-router-dom";
 import CustomModal from "../extras/modal";
 
 import NavigationBar from "./nav";
@@ -81,13 +80,13 @@ export class Dashboard extends Component {
                                         {list.list_name}
                                     </td>
                                     <td>
-                                        <Link className="waves-effect waves-light"
-                                              to={`/list/${list.id}`}>
-                                            details </Link>
+                                        <a className="waves-effect waves-light"
+                                           href={`/list/${list.id}`}>
+                                            details </a>
                                     </td>
                                     <td>
                                         <a id="edit-list-button"
-                                            className="modal-trigger waves-effect waves-light" href="#edit-list-modal"
+                                           className="modal-trigger waves-effect waves-light" href="#edit-list-modal"
                                            onClick={() => {
                                                this.setState({
                                                    "edit_list":
@@ -100,9 +99,9 @@ export class Dashboard extends Component {
                                         </a>
                                     </td>
                                     <td>
-                                        <a  id="delete-list-button"
-                                            className="waves-effect waves-light"
-                                            onClick={e => this.handleDeleteList(e, list.id)}>
+                                        <a id="delete-list-button"
+                                           className="waves-effect waves-light"
+                                           onClick={e => this.handleDeleteList(e, list.id)}>
                                             <i className="delete-text-color material-icons right">delete_sweep</i>
                                         </a>
                                     </td>
@@ -132,7 +131,8 @@ export class Dashboard extends Component {
                         </a>
                         <div className="modal-content">
                             <h6>Add A New Shopping List</h6>
-                            <form onSubmit={this.handleAddList}>
+                            <form id="add-list-form"
+                                  onSubmit={this.handleAddList}>
                                 <div>
                                     <input ref="list_name"
                                            type="text"
@@ -160,7 +160,8 @@ export class Dashboard extends Component {
                         </a>
                         <div className="modal-content">
                             <h6>Edit list "{this.state.edit_list.name}"</h6>
-                            <form onSubmit={this.handleEditList}>
+                            <form id="edit-list-form"
+                                  onSubmit={this.handleEditList}>
                                 <div>
                                     <input ref="list_id"
                                            value={this.state.edit_list.id}
@@ -168,7 +169,8 @@ export class Dashboard extends Component {
                                            required
                                            hidden
                                     />
-                                    <input ref="new_name"
+                                    <input id="new-list-name"
+                                           ref="new_name"
                                            value={this.state.edit_list.new_name || this.state.edit_list.name}
                                            onChange={this.handleEditValues}
                                            type="text"
@@ -206,7 +208,7 @@ Dashboard.propTypes = {
     loading: PropTypes.bool
 };
 
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
     return {
         loading: state.loading,
         lists: state.lists
@@ -214,7 +216,7 @@ function mapStateToProps(state) {
         ;
 }
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators(
             {
