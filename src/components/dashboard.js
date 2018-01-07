@@ -170,7 +170,7 @@ export class Dashboard extends Component {
                                            hidden
                                     />
                                     <input id="new-list-name"
-                                           ref="new_name"
+                                        ref="new_name"
                                            value={this.state.edit_list.new_name || this.state.edit_list.name}
                                            onChange={this.handleEditValues}
                                            type="text"

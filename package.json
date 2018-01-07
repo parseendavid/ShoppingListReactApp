@@ -44,19 +44,18 @@
   },
   "nyc": {
     "exclude": [
-      "./src/jestSetup.js",
-      "./src/**/*.test.js",
-      "./src/extras/*.js"
+      "./src/**/*.test.js"
     ]
   },
   "jest": {
     "bail": true,
-    "verbose": true,
+    "verbose": false,
     "setupFiles": [
       "./src/jestSetup.js"
     ]
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.10.0",
     "babel-cli": "^6.26.0",
     "babel-jest": "^22.0.4",
     "babel-plugin-transform-react-jsx": "^6.24.1",
@@ -76,6 +75,7 @@
     "npm-run-all": "^4.1.2",
     "nyc": "^11.4.1",
     "redux-devtools-extension": "^2.13.2",
+    "redux-mock-store": "^1.4.0",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7"
   },

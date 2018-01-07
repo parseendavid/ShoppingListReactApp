@@ -6,7 +6,7 @@ import expect from "expect";
 
 let handleDeleteListItemCalled, handleAddListItemCalled, handleEditListItemCalled = false;
 
-describe("Test Dashboard page", () => {
+describe("Test Details page", () => {
     function setup(loading, render_type) {
         const props = {
             lists: {
@@ -71,7 +71,7 @@ describe("Test Dashboard page", () => {
     it("should have a form.", () => {
         expect(setup(false, shallow).exists(<form/>)).toBe(true);
     });
-    it("delete list button calls Delete_Shopping_List_item action.", () => {
+    it("delete item button calls Delete_Shopping_List_item action.", () => {
         expect(setup(false, shallow).find("#delete-item-button").length).toEqual(1);
         setup(false, shallow).find("#delete-item-button").simulate("click", {
             preventDefault() {
@@ -79,7 +79,7 @@ describe("Test Dashboard page", () => {
         });
         expect(handleDeleteListItemCalled).toBe(true);
     });
-    it("Edit list button calls Modal.", () => {
+    it("Edit item button calls Modal.", () => {
         const wrapper = setup(false, shallow);
         expect(wrapper.find("#edit-item-button").length).toEqual(1);
         wrapper.find("#edit-item-button").simulate("click");
@@ -90,13 +90,13 @@ describe("Test Dashboard page", () => {
             parent_id: 11
         });
     });
-    it("Add list form calls  action.", () => {
+    it("Add item form calls  action.", () => {
         const wrapper = setup(false, mount);
         expect(wrapper.find("#add-item-form").length).toEqual(1);
         wrapper.find("#add-item-form").simulate("submit");
         expect(handleAddListItemCalled).toBe(true);
     });
-    it("Edit list form calls  action.", () => {
+    it("Edit item form calls  action.", () => {
         const wrapper = setup(false, mount);
         expect(wrapper.find("#edit-item-form").length).toEqual(1);
         wrapper.find("#edit-item-form").simulate("submit");
@@ -112,12 +112,19 @@ describe("Test Dashboard page", () => {
                     value: "Test New Name"
                 }
             });
+        wrapper.find("#new-item-name").simulate(
+            "change", {
+                target: {
+                    name: "quantity",
+                    value: 21
+                }
+            });
         expect(wrapper.state("edit_item")).toEqual({
             id: "",
             old_name: "",
             new_name: "Test New Name",
             parent_id: "",
-            quantity: ""
+            quantity: 21
         });
     });
     it("correctly maps state to props", () => {
