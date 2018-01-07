@@ -44,11 +44,13 @@
   },
   "nyc": {
     "exclude": [
-      "/src/jestSetup.js",
-      "/src/**/*.test.js"
+      "./src/jestSetup.js",
+      "./src/**/*.test.js",
+      "./src/extras/*.js"
     ]
   },
   "jest": {
+    "bail": true,
     "verbose": true,
     "setupFiles": [
       "./src/jestSetup.js"

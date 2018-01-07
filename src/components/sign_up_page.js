@@ -28,7 +28,7 @@ export class SignUp extends Component {
                 <NavigationBar text="login" icon="input" link="/login" loading={this.props.state.loading}/>
                 <div className="badge">
                     <div className="small_form container">
-                        <form onSubmit={this.handleSubmit}>
+                        <form id="sign-up-form" onSubmit={this.handleSubmit}>
                             <input ref="username"
                                    type="text"
                                    placeholder="Username"
@@ -66,13 +66,13 @@ SignUp.propTypes = {
     actions: PropTypes.object.isRequired,
     dispatch: PropTypes.object
 };
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
     return {
         state
     };
 }
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators({request,SignUp_User}, dispatch)
     };
