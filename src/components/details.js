@@ -168,10 +168,10 @@ export class Details extends Component {
                                            title="Must not contain special characters."
                                            required/>
                                     <input ref="add_quantity"
+                                           min={1}
                                            type="number"
                                            placeholder="Quantity"
                                            defaultValue="1"
-                                        // pattern="^(\d)*$"
                                            title="Please enter a number between 1 and 10000"
                                            required/>
                                     <div className="modal-footer">
