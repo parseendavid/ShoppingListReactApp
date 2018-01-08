@@ -12,7 +12,7 @@ export default class HomePage extends Component {
                     <p className="lead">The Ultimate Shopping List App</p>
                     <br/>
                     <br/>
-                    <a className="home-btn waves-effect waves-ligh accent-color btn-large " href="/signup"><i
+                    <a className="home-btn waves-effect waves-light accent-color btn-large " href="/signup"><i
                         className="material-icons right">label_outline</i>sign up</a>
 
                 </div>

@@ -5,21 +5,20 @@ import PropTypes from 'prop-types';
 import {Redirect} from "react-router-dom";
 
 import Navbar from "./nav";
-import {Login_User} from "../actions";
+import {Login_User, request} from "../actions";
 
-class LoginPage extends Component {
+export class LoginPage extends Component {
     constructor(props) {
         super(props);
-        this.state={course:""};
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        const formData = {"email":this.refs.email.value, "password":this.refs.password.value };
-        this.props.login_user(formData);
+        const formData = {"email": this.refs.email.value, "password": this.refs.password.value};
+        this.props.actions.request();
+        this.props.actions.Login_User(formData);
     }
-
 
 
     render() {
@@ -31,28 +30,28 @@ class LoginPage extends Component {
         else {
             return (
                 <div>
-                    <Navbar text="sign up" icon="label_outline" link="/signup"/>
+                    <Navbar text="sign up" icon="label_outline" link="/signup" loading={this.props.state.loading}/>
                     <div className="badge">
                         <div className="small_form container">
-                            <form onSubmit={this.handleSubmit}>
+                            <form id="login-form" onSubmit={this.handleSubmit}>
                                 <div>
-                                <input ref="email"
-                                       type="email"
-                                       placeholder="Email"
-                                       required/>
-                                <input ref="password"
-                                       type="password"
-                                       placeholder="password"
-                                       minLength="6"
-                                       required/>
-                                <button className={"btn waves-effect waves-light light-blue right"}
-                                        type="submit">
-                                    LOGIN
-                                </button>
-                                <button className={"btn waves-effect waves-light grey left"}
-                                        type="reset">
-                                    RESET
-                                </button>
+                                    <input ref="email"
+                                           type="email"
+                                           placeholder="Email"
+                                           required/>
+                                    <input ref="password"
+                                           type="password"
+                                           placeholder="password"
+                                           minLength="6"
+                                           required/>
+                                    <button className={"btn waves-effect waves-light light-blue right"}
+                                            type="submit">
+                                        LOGIN
+                                    </button>
+                                    <button className={"btn waves-effect waves-light grey left"}
+                                            type="reset">
+                                        RESET
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -66,20 +65,20 @@ class LoginPage extends Component {
 
 LoginPage.propTypes = {
     token: PropTypes.string,
-    login_user: PropTypes.func.isRequired,
     dispatch: PropTypes.object,
-    state: PropTypes.object
+    state: PropTypes.object,
+    actions: PropTypes.object.isRequired
 };
 
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
     return {
         state
     };
 }
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
     return {
-        login_user: bindActionCreators(Login_User, dispatch)
+        actions: bindActionCreators({Login_User, request}, dispatch)
     };
 }
 

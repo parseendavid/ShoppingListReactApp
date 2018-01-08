@@ -2,6 +2,7 @@
 
 import axiosConfig from "../extras/axios_config";
 import {toast} from "react-toastify";
+import $ from "jquery";
 
 
 export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists";
@@ -14,11 +15,13 @@ export const FAILURE = "FAILURE";
 
 export function request() {
     return dispatch => {
-        dispatch({type: REQUEST});
+        dispatch({
+            type: REQUEST
+        });
     };
 }
 
-function success() {
+export function success() {
     return dispatch => {
         dispatch({
             type: SUCCESS
@@ -26,7 +29,7 @@ function success() {
     };
 }
 
-function failure() {
+export function failure() {
     return dispatch => {
         dispatch({
             type: FAILURE
@@ -41,7 +44,7 @@ function failure() {
 //////////////////////////////////////////
 export function SignUp_User(values) {
     return (dispatch) => {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "post",
             url: `/auth/register/`,
             data: values
@@ -62,7 +65,7 @@ export function SignUp_User(values) {
 
 export function Login_User(values) {
     return (dispatch) => {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "post",
             url: `/auth/login/`,
             data: values
@@ -78,7 +81,7 @@ export function Login_User(values) {
             })
             .catch(() => {
                 dispatch(failure());
-                toast.error("INVALID CREDENTIALS !!!!");
+                toast.error("Wrong credentials...");
             });
     };
 }
@@ -90,7 +93,7 @@ export function Login_User(values) {
 //////////////////////////////////////////
 export function Fetch_Shopping_Lists() {
     return (dispatch) => {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "get",
             url: `/lists`,
             headers: {
@@ -110,6 +113,9 @@ export function Fetch_Shopping_Lists() {
                         case 401:
                             localStorage.removeItem("TOKEN");
                             window.location.href = "/login";
+
+                        default:
+                            toast.error(error.response.data.message);
                     }
                 }
             );
@@ -118,7 +124,7 @@ export function Fetch_Shopping_Lists() {
 
 export function Add_Shopping_List(values) {
     return function (dispatch) {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "post",
             url: `/lists`,
             headers: {
@@ -131,6 +137,7 @@ export function Add_Shopping_List(values) {
             $("#add-list-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_Lists());
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -141,7 +148,7 @@ export function Add_Shopping_List(values) {
 
 export function Edit_Shopping_List(values) {
     return function (dispatch) {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "put",
             url: `/list/${values.id}`,
             headers: {
@@ -154,6 +161,7 @@ export function Edit_Shopping_List(values) {
             $("#edit-list-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_Lists());
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -164,7 +172,7 @@ export function Edit_Shopping_List(values) {
 
 export function Delete_Shopping_List(id) {
     return function (dispatch) {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "delete",
             url: `/list/${id}`,
             headers: {
@@ -175,6 +183,7 @@ export function Delete_Shopping_List(id) {
             toast.warn(response.data.message);
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_Lists());
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -190,7 +199,7 @@ export function Delete_Shopping_List(id) {
 //////////////////////////////////////////
 export function Fetch_Shopping_List_Items(id) {
     return (dispatch) => {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "get",
             url: `/list/${id}/items`,
             headers: {
@@ -211,6 +220,8 @@ export function Fetch_Shopping_List_Items(id) {
                         window.location.href = "/login";
                     case 404:
                         window.location.href = "/dashboard";
+                    default:
+                        toast.error(error.response.data.message);
                 }
             }
         );
@@ -220,7 +231,7 @@ export function Fetch_Shopping_List_Items(id) {
 
 export function Add_Shopping_List_Item(values) {
     return function (dispatch) {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "post",
             url: `/list/${values.list_id}`,
             headers: {
@@ -233,6 +244,7 @@ export function Add_Shopping_List_Item(values) {
             $("#add-item-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_List_Items(values.list_id));
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -243,7 +255,7 @@ export function Add_Shopping_List_Item(values) {
 
 export function Delete_Shopping_List_Item(values) {
     return function (dispatch) {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "delete",
             url: `/list/${values.list_id}/${values.item_id}`,
             headers: {
@@ -254,6 +266,7 @@ export function Delete_Shopping_List_Item(values) {
             toast.warn(response.data.message);
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_List_Items(values.list_id));
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;
@@ -264,7 +277,7 @@ export function Delete_Shopping_List_Item(values) {
 
 export function Edit_Shopping_List_Item(values) {
     return function (dispatch) {
-        axiosConfig.request({
+        return axiosConfig.request({
             method: "put",
             url: `/list/${values.list_id}/${values.item_id}`,
             headers: {
@@ -277,6 +290,7 @@ export function Edit_Shopping_List_Item(values) {
             $("#edit-item-modal").modal("close");
         }).catch(
             error => {
+                dispatch(Fetch_Shopping_List_Items(values.list_id));
                 dispatch(failure());
                 toast.error(error.response.data.message);
                 return error;

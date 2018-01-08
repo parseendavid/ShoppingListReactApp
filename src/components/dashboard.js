@@ -2,19 +2,17 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {bindActionCreators} from "redux";
-import {Link} from "react-router-dom";
 import CustomModal from "../extras/modal";
 
-
 import NavigationBar from "./nav";
-import {request,Delete_Shopping_List,Edit_Shopping_List,Add_Shopping_List,Fetch_Shopping_Lists} from "../actions";
+import {Add_Shopping_List, Delete_Shopping_List, Edit_Shopping_List, Fetch_Shopping_Lists, request} from "../actions";
 import PropTypes from "prop-types";
 
 
-class Dashboard extends Component {
+export class Dashboard extends Component {
     constructor(props) {
         super(props);
-        this.state={list_name:"", edit_list:{name:"",id:""}};
+        this.state = {list_name: "", edit_list: {name: "", id: ""}};
         this.handleAddList = this.handleAddList.bind(this);
         this.handleEditValues = this.handleEditValues.bind(this);
         this.handleEditList = this.handleEditList.bind(this);
@@ -29,35 +27,31 @@ class Dashboard extends Component {
         this.props.actions.Fetch_Shopping_Lists();
     }
 
-    handleAddList(e){
+    handleAddList(e) {
         e.preventDefault();
         this.props.actions.request();
-        this.props.actions.Add_Shopping_List({"list_name":this.refs.list_name.value});
+        this.props.actions.Add_Shopping_List({"list_name": this.refs.list_name.value});
     }
-    handleEditValues(e){
+
+    handleEditValues(e) {
         e.preventDefault();
         let edit_list = this.state.edit_list;
         edit_list["new_name"] = e.target.value;
         this.setState(edit_list);
     }
 
-    handleEditList(e){
+    handleEditList(e) {
         e.preventDefault();
         this.props.actions.request();
-        this.props.actions.Edit_Shopping_List({"id":this.refs.list_id.value,"list_name":this.refs.new_name.value});
+        this.props.actions.Edit_Shopping_List({"id": this.refs.list_id.value, "list_name": this.refs.new_name.value});
     }
 
-    handleDeleteList(e,id){
+    handleDeleteList(e, id) {
         e.preventDefault();
         this.props.actions.request();
         this.props.actions.Delete_Shopping_List(id);
     }
 
-    // handleViewListDetails(e, list_details){
-    //     e.preventDefault();
-    //     console.log(list_details);
-    //
-    // }
 
     renderListTableDetails() {
         if (undefined in this.props.lists) {
@@ -86,24 +80,28 @@ class Dashboard extends Component {
                                         {list.list_name}
                                     </td>
                                     <td>
-                                        <Link className="waves-effect waves-light"
-                                           to={`/list/${list.id}`}>
-                                            details </Link>
+                                        <a className="waves-effect waves-light"
+                                           href={`/list/${list.id}`}>
+                                            details </a>
                                     </td>
                                     <td>
-                                        <a className="modal-trigger waves-effect waves-light" href="#edit-list-modal"
-                                        onClick={()=>{this.setState({"edit_list":
-                                            {
-                                            "name":list.list_name,"id":list.id
-                                            }
-                                        });
-                                        }}>
+                                        <a id="edit-list-button"
+                                           className="modal-trigger waves-effect waves-light" href="#edit-list-modal"
+                                           onClick={() => {
+                                               this.setState({
+                                                   "edit_list":
+                                                       {
+                                                           "name": list.list_name, "id": list.id
+                                                       }
+                                               });
+                                           }}>
                                             <i className="default-text-color material-icons right">edit</i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a className="waves-effect waves-light"
-                                        onClick={e=>this.handleDeleteList(e,list.id)}>
+                                        <a id="delete-list-button"
+                                           className="waves-effect waves-light"
+                                           onClick={e => this.handleDeleteList(e, list.id)}>
                                             <i className="delete-text-color material-icons right">delete_sweep</i>
                                         </a>
                                     </td>
@@ -118,103 +116,113 @@ class Dashboard extends Component {
 
     render() {
         return (
-                <div>
-                    <NavigationBar text="logout" icon="input" link="/logout" home_link="/dashboard"
-                                   loading={this.props.loading}/>
-                    <div className="container badge">
-                        <h6>Dashboard</h6>
-                        <a className="modal-trigger right btn-floating btn-large waves-effect waves-light accent-color"
-                           href="#add-list-modal">
-                            <i className="material-icons">add</i>
+            <div>
+                <NavigationBar text="logout" icon="input" link="/logout" home_link="/dashboard"
+                               loading={this.props.loading}/>
+                <div className="container badge">
+                    <h6>Dashboard</h6>
+                    <a className="btn-add-list modal-trigger right btn-floating btn-large waves-effect waves-light accent-color"
+                       href="#add-list-modal">
+                        <i className="material-icons">add</i>
+                    </a>
+                    <div id="add-list-modal" className="modal">
+                        <a className="modal-action modal-close waves-effect waves-green btn-flat right ">
+                            <i className="material-icons red">close</i>
                         </a>
-                        <div id="add-list-modal" className="modal">
-                            <a className="modal-action modal-close waves-effect waves-green btn-flat right ">
-                                <i className="material-icons red">close</i>
-                            </a>
-                            <div className="modal-content">
-                                <h6>Add A New Shopping List</h6>
-                                <form onSubmit={this.handleAddList}>
-                                    <div>
-                                        <input ref="list_name"
-                                               type="text"
-                                               placeholder="List Name"
-                                               pattern="^(\w+ ?)*$"
-                                               title="Must not contain special characters."
-                                               required/>
-                                        <div className="modal-footer">
-                                            <button className={"btn waves-effect waves-light light-blue right"}
-                                                    type="submit">
-                                                ADD
-                                            </button>
-                                            <button className={"btn waves-effect waves-light grey left"}
-                                                    type="reset">
-                                                RESET
-                                            </button>
-                                        </div>
+                        <div className="modal-content">
+                            <h6>Add A New Shopping List</h6>
+                            <form id="add-list-form"
+                                  onSubmit={this.handleAddList}>
+                                <div>
+                                    <input ref="list_name"
+                                           type="text"
+                                           placeholder="List Name"
+                                           pattern="^(\w+ ?)*$"
+                                           title="Must not contain special characters."
+                                           required/>
+                                    <div className="modal-footer">
+                                        <button className={"btn waves-effect waves-light light-blue right"}
+                                                type="submit">
+                                            ADD
+                                        </button>
+                                        <button className={"btn waves-effect waves-light grey left"}
+                                                type="reset">
+                                            RESET
+                                        </button>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
-                        <div id="edit-list-modal" className="modal">
-                            <a className="modal-action modal-close waves-effect waves-green btn-flat right ">
-                                <i className="material-icons red">close</i>
-                            </a>
-                            <div className="modal-content">
-                                <h6>Edit list "{this.state.edit_list.name}"</h6>
-                                <form onSubmit={this.handleEditList}>
-                                    <div>
-                                        <input ref="list_id"
-                                               value={this.state.edit_list.id}
-                                               type="text"
-                                               required
-                                               hidden
-                                        />
-                                        <input ref="new_name"
-                                               value={this.state.edit_list.new_name || this.state.edit_list.name}
-                                               onChange={this.handleEditValues}
-                                               type="text"
-                                               placeholder="New List Name"
-                                               pattern="^(\w+ ?)*$"
-                                               title="Must not contain special characters edit"
-                                               required
-                                        />
-                                        <div className="modal-footer">
-                                            <button className={"btn waves-effect waves-light light-blue right"}
-                                                    type="submit">
-                                                CHANGE
-                                            </button>
-                                            <button className={"btn waves-effect waves-light grey left"}
-                                                    type="reset">
-                                                RESET
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        {this.renderListTableDetails()}
                     </div>
+                    <div id="edit-list-modal" className="modal">
+                        <a className="modal-action modal-close waves-effect waves-green btn-flat right ">
+                            <i className="material-icons red">close</i>
+                        </a>
+                        <div className="modal-content">
+                            <h6>Edit list "{this.state.edit_list.name}"</h6>
+                            <form id="edit-list-form"
+                                  onSubmit={this.handleEditList}>
+                                <div>
+                                    <input ref="list_id"
+                                           value={this.state.edit_list.id}
+                                           type="text"
+                                           required
+                                           hidden
+                                    />
+                                    <input id="new-list-name"
+                                        ref="new_name"
+                                           value={this.state.edit_list.new_name || this.state.edit_list.name}
+                                           onChange={this.handleEditValues}
+                                           type="text"
+                                           placeholder="New List Name"
+                                           pattern="^(\w+ ?)*$"
+                                           title="Must not contain special characters edit"
+                                           required
+                                    />
+                                    <div className="modal-footer">
+                                        <button className={"btn waves-effect waves-light light-blue right"}
+                                                type="submit">
+                                            CHANGE
+                                        </button>
+                                        <button className={"btn waves-effect waves-light grey left"}
+                                                type="reset">
+                                            RESET
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {this.renderListTableDetails()}
                 </div>
-            );
+            </div>
+        );
     }
 }
+
 Dashboard.propTypes = {
     token: PropTypes.string,
     actions: PropTypes.object.isRequired,
     dispatch: PropTypes.object,
     lists: PropTypes.object,
-    loading:PropTypes.bool
+    loading: PropTypes.bool
 };
-function mapStateToProps(state) {
+
+export function mapStateToProps(state) {
     return {
-        loading:state.loading,
-        lists: state.lists}
+        loading: state.loading,
+        lists: state.lists
+    }
         ;
 }
-function mapDispatchToProps(dispatch) {
-    return {actions : bindActionCreators(
-        {
-            Fetch_Shopping_Lists, Add_Shopping_List,Edit_Shopping_List,Delete_Shopping_List,request
-        },dispatch)};
+
+export function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(
+            {
+                Fetch_Shopping_Lists, Add_Shopping_List, Edit_Shopping_List, Delete_Shopping_List, request
+            }, dispatch)
+    };
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

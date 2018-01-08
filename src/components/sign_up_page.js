@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import NavigationBar from "./nav";
-import {SignUp_User} from "../actions";
+import {request,SignUp_User} from "../actions";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import PropTypes from "prop-types";
 
 
 
-class SignUp extends Component {
+export class SignUp extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,16 +18,17 @@ class SignUp extends Component {
         const formData = {"username":this.refs.username.value,
                           "email":this.refs.email.value,
                           "password":this.refs.password.value };
-        this.props.register_user(formData);
+        this.props.actions.request();
+        this.props.actions.SignUp_User(formData);
     }
 
     render() {
         return (
             <div>
-                <NavigationBar text="login" icon="input" link="/login"/>
+                <NavigationBar text="login" icon="input" link="/login" loading={this.props.state.loading}/>
                 <div className="badge">
                     <div className="small_form container">
-                        <form onSubmit={this.handleSubmit}>
+                        <form id="sign-up-form" onSubmit={this.handleSubmit}>
                             <input ref="username"
                                    type="text"
                                    placeholder="Username"
@@ -61,18 +62,19 @@ class SignUp extends Component {
     }
 SignUp.propTypes = {
     token: PropTypes.string,
-    register_user: PropTypes.func.isRequired,
+    state: PropTypes.object,
+    actions: PropTypes.object.isRequired,
     dispatch: PropTypes.object
 };
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
     return {
         state
     };
 }
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
     return {
-        register_user: bindActionCreators(SignUp_User, dispatch)
+        actions: bindActionCreators({request,SignUp_User}, dispatch)
     };
 }
 

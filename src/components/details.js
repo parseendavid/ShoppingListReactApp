@@ -5,14 +5,17 @@ import {bindActionCreators} from "redux";
 import CustomModal from "../extras/modal";
 
 import NavigationBar from "./nav";
-import {request,Delete_Shopping_List_Item,Edit_Shopping_List_Item,Add_Shopping_List_Item,Fetch_Shopping_List_Items} from "../actions";
+import {
+    Add_Shopping_List_Item, Delete_Shopping_List_Item, Edit_Shopping_List_Item, Fetch_Shopping_List_Items,
+    request
+} from "../actions";
 import PropTypes from "prop-types";
 
 
-class Details extends Component {
+export class Details extends Component {
     constructor(props) {
         super(props);
-        this.state={edit_item:{quantity:"",old_name:"",new_name:"",id:"",parent_id:""}};
+        this.state = {edit_item: {quantity: "", old_name: "", new_name: "", id: "", parent_id: ""}};
         this.handleAddListItem = this.handleAddListItem.bind(this);
         this.handleEditValues = this.handleEditValues.bind(this);
         this.handleEditListItem = this.handleEditListItem.bind(this);
@@ -27,48 +30,50 @@ class Details extends Component {
         this.props.actions.Fetch_Shopping_List_Items(this.props.match.params.id);
     }
 
-    handleAddListItem(e){
+    handleAddListItem(e) {
         e.preventDefault();
         this.props.actions.request();
         this.props.actions.Add_Shopping_List_Item({
-            "list_id":this.props.match.params.id,
-            "item_name":this.refs.add_item_name.value,
-            "quantity":this.refs.add_quantity.value
+            "list_id": this.props.match.params.id,
+            "item_name": this.refs.add_item_name.value,
+            "quantity": this.refs.add_quantity.value
         });
     }
-    handleEditValues(e){
+
+    handleEditValues(e) {
         e.preventDefault();
         let edit_item = this.state.edit_item;
-        if(e.target.name === "new_name"){
-        edit_item.new_name = e.target.value;
+        if (e.target.name === "new_name") {
+            edit_item.new_name = e.target.value;
         }
-        else if(e.target.name === "quantity"){
+        else if (e.target.name === "quantity") {
             edit_item.quantity = e.target.value;
         }
         this.setState(edit_item);
     }
 
-    handleEditListItem(e){
+    handleEditListItem(e) {
         e.preventDefault();
         this.props.actions.request();
         this.props.actions.Edit_Shopping_List_Item({
-            "list_id":this.refs.list_id.value,
-            "item_id":this.refs.item_id.value,
-            "item_name":this.refs.new_name.value,
-            "quantity":this.refs.quantity.value});
+            "list_id": this.refs.list_id.value,
+            "item_id": this.refs.item_id.value,
+            "item_name": this.refs.new_name.value,
+            "quantity": this.refs.quantity.value
+        });
     }
 
-    handleDeleteListItem(e,id){
+    handleDeleteListItem(e, id) {
         e.preventDefault();
         this.props.actions.request();
         this.props.actions.Delete_Shopping_List_Item({
-            "list_id":this.props.items_details.parent.list_id,
-            "item_id":id
+            "list_id": this.props.items_details.parent.list_id,
+            "item_id": id
         });
     }
 
     renderListTableDetails() {
-        if (!this.props.items_details.items || undefined in this.props.items_details.items ){
+        if (!this.props.items_details.items || undefined in this.props.items_details.items) {
             return (
                 <div>
                     <h6 className="secondary-text-color">Please Create a Shopping List by Pressing the Floating "+"
@@ -77,62 +82,64 @@ class Details extends Component {
             );
         }
         else {
-                return (
-                    <table className="container highlight" style={{width: "100%"}}>
-                        <thead>
-                        <tr>
-                            <th>
+            return (
+                <table className="container highlight" style={{width: "100%"}}>
+                    <thead>
+                    <tr>
+                        <th>
                             <h6>Details for "{this.props.items_details.parent.list_name}" shopping list.</h6>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Name</th>
-                            <th>Quantity</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {_.map(_.mapKeys(this.props.items_details.items, "item_name"),
-                            item => {
-                                return (
-                                    <tr key={item.id}>
-                                        <td>
-                                            {item.item_name}
-                                        </td>
-                                        <td>
-                                            {item.quantity}
-                                        </td>
-                                        <td>
-                                            <a className="modal-trigger waves-effect waves-light"
-                                               href="#edit-item-modal"
-                                               onClick={() => {
-                                                   this.setState({
-                                                       "edit_item":
-                                                           {
-                                                               "old_name": item.item_name,
-                                                               "id": item.id,
-                                                               "parent_id":this.props.items_details.parent.list_id,
-                                                               "quantity":parseInt(item.quantity)
-                                                           }
-                                                   });
-                                               }}>
-                                                <i className="default-text-color material-icons right">edit</i>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a className="waves-effect waves-light"
-                                               onClick={e => this.handleDeleteListItem(e, item.id)}>
-                                                <i className="delete-text-color material-icons right">delete_sweep</i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                );
-            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {_.map(_.mapKeys(this.props.items_details.items, "item_name"),
+                        item => {
+                            return (
+                                <tr key={item.id}>
+                                    <td>
+                                        {item.item_name}
+                                    </td>
+                                    <td>
+                                        {item.quantity}
+                                    </td>
+                                    <td>
+                                        <a id="edit-item-button"
+                                           className="modal-trigger waves-effect waves-light"
+                                           href="#edit-item-modal"
+                                           onClick={() => {
+                                               this.setState({
+                                                   "edit_item":
+                                                       {
+                                                           "old_name": item.item_name,
+                                                           "id": item.id,
+                                                           "parent_id": this.props.items_details.parent.list_id,
+                                                           "quantity": parseInt(item.quantity, 10)
+                                                       }
+                                               });
+                                           }}>
+                                            <i className="default-text-color material-icons right">edit</i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a id="delete-item-button"
+                                           className="waves-effect waves-light"
+                                           onClick={e => this.handleDeleteListItem(e, item.id)}>
+                                            <i className="delete-text-color material-icons right">delete_sweep</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            );
+        }
     }
 
     render() {
@@ -151,7 +158,8 @@ class Details extends Component {
                         </a>
                         <div className="modal-content">
                             <h6>Add A New Item.</h6>
-                            <form onSubmit={this.handleAddListItem}>
+                            <form id="add-item-form"
+                                  onSubmit={this.handleAddListItem}>
                                 <div>
                                     <input ref="add_item_name"
                                            type="text"
@@ -160,10 +168,10 @@ class Details extends Component {
                                            title="Must not contain special characters."
                                            required/>
                                     <input ref="add_quantity"
+                                           min={1}
                                            type="number"
                                            placeholder="Quantity"
                                            defaultValue="1"
-                                           // pattern="^(\d)*$"
                                            title="Please enter a number between 1 and 10000"
                                            required/>
                                     <div className="modal-footer">
@@ -186,7 +194,8 @@ class Details extends Component {
                         </a>
                         <div className="modal-content">
                             <h6>Edit "{this.state.edit_item.old_name}" item.</h6>
-                            <form onSubmit={this.handleEditListItem}>
+                            <form id="edit-item-form"
+                                  onSubmit={this.handleEditListItem}>
                                 <div>
                                     <input ref="item_id"
                                            value={this.state.edit_item.id}
@@ -200,7 +209,8 @@ class Details extends Component {
                                            required
                                            hidden
                                     />
-                                    <input ref="new_name"
+                                    <input id="new-item-name"
+                                           ref="new_name"
                                            name="new_name"
                                            value={this.state.edit_item.new_name || this.state.edit_item.old_name}
                                            onChange={this.handleEditValues}
@@ -238,24 +248,30 @@ class Details extends Component {
         );
     }
 }
+
 Details.propTypes = {
     match: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
     dispatch: PropTypes.object,
     items_details: PropTypes.object,
-    loading : PropTypes.bool,
+    loading: PropTypes.bool,
 };
-function mapStateToProps(state) {
+
+export function mapStateToProps(state) {
     return {
         items_details: state.items_details,
-        loading : state.loading
+        loading: state.loading
     };
 }
-function mapDispatchToProps(dispatch) {
-    return {actions : bindActionCreators(
+
+export function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(
             {
-                Fetch_Shopping_List_Items, Add_Shopping_List_Item,Edit_Shopping_List_Item,Delete_Shopping_List_Item,
+                Fetch_Shopping_List_Items, Add_Shopping_List_Item, Edit_Shopping_List_Item, Delete_Shopping_List_Item,
                 request
-            },dispatch)};
+            }, dispatch)
+    };
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Details);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Details);
