@@ -10,6 +10,8 @@ import {
     request
 } from "../actions";
 import PropTypes from "prop-types";
+import DataTable, {destroyDataTable} from "../extras/datatables";
+
 
 
 export class Details extends Component {
@@ -28,7 +30,17 @@ export class Details extends Component {
         const {actions} = this.props;
         CustomModal();
         actions.request();
-        actions.Fetch_Shopping_List_Items(this.props.match.params.id);
+        actions.Fetch_Shopping_List_Items(this.props.match.params.id).then(
+            ()=>{
+                DataTable("#shopping_list_items_table");
+            }
+        );
+    }
+    componentWillUpdate(){
+        destroyDataTable("#shopping_list_items_table");
+    }
+    componentDidUpdate(){
+        DataTable("#shopping_list_items_table");
     }
 
     handleAddListItem(e) {
@@ -43,7 +55,6 @@ export class Details extends Component {
     }
 
     handleEditValues(e) {
-        const {actions} = this.props;
         e.preventDefault();
         let edit_item = this.state.edit_item;
         if (e.target.name === "new_name") {
@@ -83,14 +94,26 @@ export class Details extends Component {
             return (
                 <div>
                     <h6 className="secondary-text-color">Please Create a Shopping List by Pressing the Floating "+"
-                        button.</h6>
+                        button.
+                    </h6>
+                    <br/>
+                    <a className="btn white-text blue" href="/dashboard">
+                        <i className="left material-icons">chevron_left</i> BACK
+                    </a>
                 </div>
             );
         }
         else {
             return (
-                <table className="container highlight" style={{width: "100%"}}>
+                <table id="shopping_list_items_table" className="container highlight" style={{width: "100%"}}>
                     <thead>
+                    <tr>
+                        <th>
+                            <a className="btn white-text blue" href="/dashboard">
+                                <i className="left material-icons">chevron_left</i> BACK
+                            </a>
+                        </th>
+                    </tr>
                     <tr>
                         <th>
                             <h6>Details for "{items_details.parent.list_name}" shopping list.</h6>
@@ -154,7 +177,7 @@ export class Details extends Component {
                 <NavigationBar text="logout" icon="input" link="/logout" home_link="/dashboard"
                                loading={this.props.loading}/>
                 <div className="container badge">
-                    <a className="modal-trigger right btn-floating btn-large waves-effect waves-light accent-color"
+                    <a className="modal-trigger left btn-floating btn-large waves-effect waves-light accent-color"
                        href="#add-item-modal">
                         <i className="material-icons">add</i>
                     </a>

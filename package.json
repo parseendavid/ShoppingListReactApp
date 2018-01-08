@@ -12,6 +12,8 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
+    "datatables.net": "^1.10.16",
+    "datatables.net-se": "^1.10.16",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "materialize-css": "^0.100.2",
@@ -27,7 +29,8 @@
     "react-toastify": "^3.2.1",
     "redux": "^3.7.2",
     "redux-immutable-state-invariant": "^2.1.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "semantic-ui-css": "^2.2.12"
   },
   "scripts": {
     "start": "npm-run-all --parallel serve:slapp lint:watch test:watch test:coverage",

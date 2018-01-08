@@ -9,6 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 import "materialize-css/dist/css/materialize.min.css";
 import "jquery";
 import "materialize-css/dist/js/materialize.min";
+import "../node_modules/semantic-ui-css/semantic.min.css";
 
 
 ReactDOM.render(

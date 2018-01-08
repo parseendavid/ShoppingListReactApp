@@ -3,11 +3,11 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 import {bindActionCreators} from "redux";
 import CustomModal from "../extras/modal";
-import Jquery from "jquery";
 
 import NavigationBar from "./nav";
 import {Add_Shopping_List, Delete_Shopping_List, Edit_Shopping_List, Fetch_Shopping_Lists, request} from "../actions";
 import PropTypes from "prop-types";
+import DataTable, {destroyDataTable} from "../extras/datatables";
 
 export class Dashboard extends Component {
     constructor(props) {
@@ -20,12 +20,18 @@ export class Dashboard extends Component {
 
 
     }
-
     componentDidMount() {
         const {actions} = this.props;
         CustomModal();
-        actions.request();
-        actions.Fetch_Shopping_Lists();
+        actions.Fetch_Shopping_Lists().then(()=>{
+            DataTable("#shopping_list_table");
+        });
+    }
+    componentWillUpdate(){
+        destroyDataTable("#shopping_list_table");
+    }
+    componentDidUpdate(){
+        DataTable("#shopping_list_table");
     }
 
     handleAddList(e) {
@@ -66,11 +72,12 @@ export class Dashboard extends Component {
         }
         else {
             return (
-                <table className="container highlight" style={{width: "100%"}}>
+                <table id="shopping_list_table" className="container highlight" style={{width: "100%"}}>
                     <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Shopping List Name</th>
                         <th>Items</th>
+                        <th>Last Modified</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -87,6 +94,9 @@ export class Dashboard extends Component {
                                         <a className="waves-effect waves-light"
                                            href={`/list/${list.id}`}>
                                             details </a>
+                                    </td>
+                                    <td>
+                                        {list.date_modified}
                                     </td>
                                     <td>
                                         <a id="edit-list-button"
@@ -125,7 +135,7 @@ export class Dashboard extends Component {
                                loading={this.props.loading}/>
                 <div className="container badge">
                     <h6>Dashboard</h6>
-                    <a className="btn-add-list modal-trigger right btn-floating btn-large waves-effect waves-light accent-color"
+                    <a className="btn-add-list modal-trigger left btn-floating btn-large waves-effect waves-light accent-color"
                        href="#add-list-modal">
                         <i className="material-icons">add</i>
                     </a>
