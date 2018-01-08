@@ -31,8 +31,8 @@
   },
   "scripts": {
     "start": "npm-run-all --parallel serve:slapp lint:watch test:watch test:coverage",
-    "serve:slapp": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js ",
-    "build": "babel src -d lib",
+    "serve:slapp": "react-scripts start",
+    "build": "react-scripts build",
     "test": "nyc jest --coverage",
     "test:coverage": "npm run test > coveralls",
     "test:watch": "npm run test -- --watchAll",

@@ -119,7 +119,7 @@ export class Details extends Component {
                                                            "old_name": item.item_name,
                                                            "id": item.id,
                                                            "parent_id": this.props.items_details.parent.list_id,
-                                                           "quantity": parseInt(item.quantity)
+                                                           "quantity": parseInt(item.quantity, 10)
                                                        }
                                                });
                                            }}>

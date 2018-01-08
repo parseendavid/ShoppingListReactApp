@@ -1,6 +1,6 @@
 /* eslint no-case-declarations: 0 */  // --> OFF
 
-import {FETCH_SHOPPING_LIST_ITEMS, FETCH_SHOPPING_LIST_DET} from "../actions";
+import {FETCH_SHOPPING_LIST_ITEMS} from "../actions";
 import _ from "lodash";
 export default function (state = {}, action) {
     switch (action.type) {

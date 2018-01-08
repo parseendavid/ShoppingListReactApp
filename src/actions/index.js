@@ -2,6 +2,7 @@
 
 import axiosConfig from "../extras/axios_config";
 import {toast} from "react-toastify";
+import $ from "jquery";
 
 
 export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists";
@@ -111,6 +112,10 @@ export function Fetch_Shopping_Lists() {
                     switch (error.response.status) {
                         case 401:
                             localStorage.removeItem("TOKEN");
+                            window.location.href = "/login";
+
+                        default:
+                            toast.error(error.response.data.message);
                     }
                 }
             );
@@ -215,6 +220,8 @@ export function Fetch_Shopping_List_Items(id) {
                         window.location.href = "/login";
                     case 404:
                         window.location.href = "/dashboard";
+                    default:
+                        toast.error(error.response.data.message);
                 }
             }
         );
