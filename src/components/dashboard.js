@@ -3,11 +3,11 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 import {bindActionCreators} from "redux";
 import CustomModal from "../extras/modal";
+import Jquery from "jquery";
 
 import NavigationBar from "./nav";
 import {Add_Shopping_List, Delete_Shopping_List, Edit_Shopping_List, Fetch_Shopping_Lists, request} from "../actions";
 import PropTypes from "prop-types";
-
 
 export class Dashboard extends Component {
     constructor(props) {
@@ -22,15 +22,17 @@ export class Dashboard extends Component {
     }
 
     componentDidMount() {
+        const {actions} = this.props;
         CustomModal();
-        this.props.actions.request();
-        this.props.actions.Fetch_Shopping_Lists();
+        actions.request();
+        actions.Fetch_Shopping_Lists();
     }
 
     handleAddList(e) {
+        const {actions} = this.props;
         e.preventDefault();
-        this.props.actions.request();
-        this.props.actions.Add_Shopping_List({"list_name": this.refs.list_name.value});
+        actions.request();
+        actions.Add_Shopping_List({"list_name": this.refs.list_name.value});
     }
 
     handleEditValues(e) {
@@ -41,15 +43,17 @@ export class Dashboard extends Component {
     }
 
     handleEditList(e) {
+        const {actions} = this.props;
         e.preventDefault();
-        this.props.actions.request();
-        this.props.actions.Edit_Shopping_List({"id": this.refs.list_id.value, "list_name": this.refs.new_name.value});
+        actions.request();
+        actions.Edit_Shopping_List({"id": this.refs.list_id.value, "list_name": this.refs.new_name.value});
     }
 
     handleDeleteList(e, id) {
+        const {actions} = this.props;
         e.preventDefault();
-        this.props.actions.request();
-        this.props.actions.Delete_Shopping_List(id);
+        actions.request();
+        actions.Delete_Shopping_List(id);
     }
 
 

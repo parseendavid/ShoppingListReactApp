@@ -25,15 +25,17 @@ export class Details extends Component {
     }
 
     componentDidMount() {
+        const {actions} = this.props;
         CustomModal();
-        this.props.actions.request();
-        this.props.actions.Fetch_Shopping_List_Items(this.props.match.params.id);
+        actions.request();
+        actions.Fetch_Shopping_List_Items(this.props.match.params.id);
     }
 
     handleAddListItem(e) {
+        const {actions} = this.props;
         e.preventDefault();
-        this.props.actions.request();
-        this.props.actions.Add_Shopping_List_Item({
+        actions.request();
+        actions.Add_Shopping_List_Item({
             "list_id": this.props.match.params.id,
             "item_name": this.refs.add_item_name.value,
             "quantity": this.refs.add_quantity.value
@@ -41,6 +43,7 @@ export class Details extends Component {
     }
 
     handleEditValues(e) {
+        const {actions} = this.props;
         e.preventDefault();
         let edit_item = this.state.edit_item;
         if (e.target.name === "new_name") {
@@ -53,9 +56,10 @@ export class Details extends Component {
     }
 
     handleEditListItem(e) {
+        const {actions} = this.props;
         e.preventDefault();
-        this.props.actions.request();
-        this.props.actions.Edit_Shopping_List_Item({
+        actions.request();
+        actions.Edit_Shopping_List_Item({
             "list_id": this.refs.list_id.value,
             "item_id": this.refs.item_id.value,
             "item_name": this.refs.new_name.value,
@@ -64,16 +68,18 @@ export class Details extends Component {
     }
 
     handleDeleteListItem(e, id) {
+        const {actions} = this.props;
         e.preventDefault();
-        this.props.actions.request();
-        this.props.actions.Delete_Shopping_List_Item({
+        actions.request();
+        actions.Delete_Shopping_List_Item({
             "list_id": this.props.items_details.parent.list_id,
             "item_id": id
         });
     }
 
     renderListTableDetails() {
-        if (!this.props.items_details.items || undefined in this.props.items_details.items) {
+        const {items_details} = this.props;
+        if (!items_details.items || undefined in items_details.items) {
             return (
                 <div>
                     <h6 className="secondary-text-color">Please Create a Shopping List by Pressing the Floating "+"
@@ -87,7 +93,7 @@ export class Details extends Component {
                     <thead>
                     <tr>
                         <th>
-                            <h6>Details for "{this.props.items_details.parent.list_name}" shopping list.</h6>
+                            <h6>Details for "{items_details.parent.list_name}" shopping list.</h6>
                         </th>
                     </tr>
                     <tr>
@@ -98,7 +104,7 @@ export class Details extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {_.map(_.mapKeys(this.props.items_details.items, "item_name"),
+                    {_.map(_.mapKeys(items_details.items, "item_name"),
                         item => {
                             return (
                                 <tr key={item.id}>
@@ -118,7 +124,7 @@ export class Details extends Component {
                                                        {
                                                            "old_name": item.item_name,
                                                            "id": item.id,
-                                                           "parent_id": this.props.items_details.parent.list_id,
+                                                           "parent_id": items_details.parent.list_id,
                                                            "quantity": parseInt(item.quantity, 10)
                                                        }
                                                });

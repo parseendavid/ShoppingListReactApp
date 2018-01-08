@@ -14,7 +14,6 @@ export default class HomePage extends Component {
                     <br/>
                     <a className="home-btn waves-effect waves-light accent-color btn-large " href="/signup"><i
                         className="material-icons right">label_outline</i>sign up</a>
-
                 </div>
             </div>
         );
