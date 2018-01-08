@@ -7,7 +7,6 @@ import $ from "jquery";
 
 export const FETCH_SHOPPING_LISTS = "fetch_shopping_lists";
 export const FETCH_SHOPPING_LIST_ITEMS = "fetch_shopping_list_items";
-export const FETCH_SHOPPING_LIST_DET = "fetch_shopping_list_det";
 export const FETCH_JWT_TOKEN = "fetch_jwt_token";
 export const REQUEST = "REQUEST";
 export const SUCCESS = "SUCCESS";
@@ -105,8 +104,7 @@ export function Fetch_Shopping_Lists() {
                 payload: response
             });
             dispatch(success());
-        })
-            .catch(
+        }).catch(
                 error => {
                     dispatch(failure());
                     switch (error.response.status) {
