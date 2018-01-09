@@ -30,11 +30,7 @@ export class Details extends Component {
         const {actions} = this.props;
         CustomModal();
         actions.request();
-        actions.Fetch_Shopping_List_Items(this.props.match.params.id).then(
-            ()=>{
-                DataTable("#shopping_list_items_table");
-            }
-        );
+        actions.Fetch_Shopping_List_Items(this.props.match.params.id);
     }
     componentWillUpdate(){
         destroyDataTable("#shopping_list_items_table");

@@ -23,11 +23,9 @@ export class Dashboard extends Component {
     componentDidMount() {
         const {actions} = this.props;
         CustomModal();
-        actions.Fetch_Shopping_Lists().then(()=>{
-            DataTable("#shopping_list_table");
-        });
+        actions.Fetch_Shopping_Lists();
     }
-    componentWillUpdate(){
+    componentWillReceiveProps(){
         destroyDataTable("#shopping_list_table");
     }
     componentDidUpdate(){

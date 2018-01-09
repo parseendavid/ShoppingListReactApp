@@ -2,6 +2,7 @@ import React from "react";
 import {mount, shallow} from "enzyme";
 import {Dashboard, mapDispatchToProps, mapStateToProps} from "../dashboard";
 import NavigationBar from "../nav";
+import jQuery from "jquery";
 import expect from "expect";
 
 let handleDeleteCalled, handleAddListCalled, handleEditListCalled = false;
@@ -64,37 +65,11 @@ describe("Test Dashboard page", () => {
         });
         expect(handleDeleteCalled).toBe(true);
     });
-    it("Edit list button calls Modal.", () => {
-        const wrapper = setup(false, shallow);
-        expect(wrapper.find("#edit-list-button").length).toEqual(1);
-        wrapper.find("#edit-list-button").simulate("click");
-        expect(wrapper.state("edit_list")).toEqual({
-            id: 5,
-            name: "test list"
-        });
-    });
     it("Add list form calls  action.", () => {
         const wrapper = setup(false, mount);
         expect(wrapper.find("#add-list-form").length).toEqual(1);
         wrapper.find("#add-list-form").simulate("submit");
         expect(handleAddListCalled).toBe(true);
-    });
-    it("Edit list form calls  action.", () => {
-        const wrapper = setup(false, mount);
-        expect(wrapper.find("#edit-list-form").length).toEqual(1);
-        wrapper.find("#edit-list-form").simulate("submit");
-        expect(handleEditListCalled).toBe(true);
-    });
-    it("Edit new name change affects state form calls  action.", () => {
-        const wrapper = setup(false, mount);
-        expect(wrapper.find("#new-list-name").length).toEqual(1);
-        wrapper.find("#new-list-name").simulate(
-            "change", {target: { value: "Test New Name" } });
-        expect(wrapper.state("edit_list")).toEqual({
-            id:"",
-            name:"",
-            new_name: "Test New Name"
-        });
     });
     it("correctly maps state to props", () => {
     const state = {

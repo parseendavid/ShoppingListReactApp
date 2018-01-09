@@ -40,7 +40,7 @@
     "test:coverage": "npm run test > coveralls",
     "test:watch": "npm run test -- --watchAll",
     "test:watch:coverage": "npm ",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "nyc report | coveralls",
     "lint": "node_modules/.bin/esw webpack.config.* src public/assets/js",
     "lint:watch": "npm run lint -- --watch",
     "eject": "react-scripts eject"
@@ -51,7 +51,13 @@
     ]
   },
   "jest": {
-    "bail": true,
+    "collectCoverageFrom": [
+      "src/components/*.js",
+      "src/actions/*.js"
+    ],
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    },
     "verbose": false,
     "setupFiles": [
       "./src/jestSetup.js"
