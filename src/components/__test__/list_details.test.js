@@ -79,17 +79,6 @@ describe("Test Details page", () => {
         });
         expect(handleDeleteListItemCalled).toBe(true);
     });
-    it("Edit item button calls Modal.", () => {
-        const wrapper = setup(false, shallow);
-        expect(wrapper.find("#edit-item-button").length).toEqual(1);
-        wrapper.find("#edit-item-button").simulate("click");
-        expect(wrapper.state("edit_item")).toEqual({
-            id: 4,
-            old_name: 'sugar',
-            quantity: 1,
-            parent_id: 11
-        });
-    });
     it("Add item form calls  action.", () => {
         const wrapper = setup(false, mount);
         expect(wrapper.find("#add-item-form").length).toEqual(1);
@@ -101,31 +90,6 @@ describe("Test Details page", () => {
         expect(wrapper.find("#edit-item-form").length).toEqual(1);
         wrapper.find("#edit-item-form").simulate("submit");
         expect(handleEditListItemCalled).toBe(true);
-    });
-    it("Edit new name change affects state form calls  action.", () => {
-        const wrapper = setup(false, mount);
-        expect(wrapper.find("#new-item-name").length).toEqual(1);
-        wrapper.find("#new-item-name").simulate(
-            "change", {
-                target: {
-                    name: "new_name",
-                    value: "Test New Name"
-                }
-            });
-        wrapper.find("#new-item-name").simulate(
-            "change", {
-                target: {
-                    name: "quantity",
-                    value: 21
-                }
-            });
-        expect(wrapper.state("edit_item")).toEqual({
-            id: "",
-            old_name: "",
-            new_name: "Test New Name",
-            parent_id: "",
-            quantity: 21
-        });
     });
     it("correctly maps state to props", () => {
         const state = {

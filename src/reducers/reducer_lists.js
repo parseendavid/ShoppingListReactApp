@@ -4,7 +4,12 @@ import _ from 'lodash';
 export default function (state = {}, action) {
     switch (action.type) {
         case FETCH_SHOPPING_LISTS:
-            return _.mapKeys(action.payload.data.shopping_lists, 'id');
+            if (action.payload.status === 204) {
+                return {};
+            }
+            else {
+                return _.mapKeys(action.payload.data.shopping_lists, 'id');
+            }
         default:
             return state;
     }
