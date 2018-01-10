@@ -49,7 +49,7 @@ Tests files are in the same directories as the files being tested. After success
 
 
 ### Usage.
-
+![Gif is Loading...](https://github.com/parseendavid/shopping-list-react-app/raw/master/illustrations/react-redux.gif)
 
 ##### Access the server using [Google Chrome](https://www.google.com/chrome/browser/desktop/index.html)
 
