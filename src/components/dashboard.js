@@ -23,6 +23,7 @@ export class Dashboard extends Component {
     componentDidMount() {
         const {actions} = this.props;
         CustomModal();
+        actions.request();
         actions.Fetch_Shopping_Lists();
     }
     componentWillReceiveProps(){
