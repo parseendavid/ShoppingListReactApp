@@ -18,7 +18,7 @@
     "eslint": "^5.0.0",
     "install-peers": "^1.0.3",
     "jquery": "^3.2.1",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.21",
     "materialize-css": "^0.100.2",
     "path": "^0.12.7",
     "prop-types": "^15.6.0",
